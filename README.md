@@ -47,9 +47,15 @@ app/src/main/java/com/studytracker/app/
 
 1. Install **Android Studio** (Koala/2024.1 or newer).
 2. Open the `StudyTracker` folder as a project (File → Open).
-3. Let Gradle sync — it will download the AndroidX/Compose/Room dependencies automatically.
-4. Run on an emulator or a physical device with **Android 8.0 (API 26) or newer**.
-5. On first launch the app asks for:
+3. After opening the StudyTracker folder, Android Studio will show a progress bar at the bottom labeled 'Gradle Sync' or similar. Don't do anything until it finishes — it's downloading the libraries the app needs. This can take a few minutes the first time.
+4. Along the top menu bar, click Build. This is the menu that controls compiling your project.
+In the dropdown, hover over 'Build App Bundle(s) / APK(s)'. A submenu will pop out to the side.
+Select 'Build APK(s)' from that submenu. Android Studio will start compiling — you'll see a progress bar in the bottom-right corner labeled something like 'Building...'.
+5. When it finishes, a small popup appears in the bottom-right saying 'APK(s) generated successfully' with a link that says 'locate' or 'analyze'.
+6. Click 'locate' in that popup — it opens a file explorer window pointing straight at the file. It'll be at app/build/outputs/apk/debug/app-debug.apk inside your project folder if you want to find it manually later.
+7. Copy app-debug.apk to your phone any way you like — USB cable, email it to yourself, upload to Google Drive, etc.
+8. Open the apk file on your phone using a file manager app. Android will warn you it's from an 'unknown source' — tap Settings, then enable 'Allow from this source' for that one app, go back, and tap Install.
+9. On first launch the app asks for:
    - **Notification permission** (Android 13+)
    - **"Alarms & reminders" permission** (Android 12+, needed for the reminders to fire at the
      *exact* minute rather than being delayed by the OS) — this opens a system settings screen
