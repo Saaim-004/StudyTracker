@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,13 +26,17 @@ fun TaskListScreen(
     onOpenTask: (Task) -> Unit,
     onToggleCompleted: (Task) -> Unit,
     onDeleteTask: (Task) -> Unit,
-    onOpenThemeSettings: () -> Unit
+    onOpenThemeSettings: () -> Unit,
+    onOpenCalendar: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("StudyTracker") },
                 actions = {
+                    IconButton(onClick = onOpenCalendar) {
+                        Icon(Icons.Default.CalendarMonth, contentDescription = "Calendar")
+                    }
                     IconButton(onClick = onOpenThemeSettings) {
                         Icon(Icons.Default.Palette, contentDescription = "Theme settings")
                     }
