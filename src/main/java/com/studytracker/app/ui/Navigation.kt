@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.studytracker.app.data.Task
 import com.studytracker.app.ui.screens.AddEditTaskScreen
+import com.studytracker.app.ui.screens.CalendarScreen
 import com.studytracker.app.ui.screens.TaskListScreen
 import com.studytracker.app.ui.screens.ThemeSettingsScreen
 import com.studytracker.app.ui.theme.StudyTrackerTheme
@@ -18,6 +19,7 @@ import com.studytracker.app.ui.theme.StudyTrackerTheme
 private const val ROUTE_LIST = "list"
 private const val ROUTE_ADD_EDIT = "add_edit?taskId={taskId}"
 private const val ROUTE_THEME = "theme"
+private const val ROUTE_CALENDAR = "calendar"
 
 @Composable
 fun StudyTrackerNavHost() {
@@ -37,7 +39,15 @@ fun StudyTrackerNavHost() {
                     onOpenTask = { task -> navController.navigate("add_edit?taskId=${task.id}") },
                     onToggleCompleted = { viewModel.toggleCompleted(it) },
                     onDeleteTask = { viewModel.deleteTask(it) },
-                    onOpenThemeSettings = { navController.navigate(ROUTE_THEME) }
+                    onOpenThemeSettings = { navController.navigate(ROUTE_THEME) },
+                    onOpenCalendar = { navController.navigate(ROUTE_CALENDAR) }
+                )
+            }
+            composable(ROUTE_CALENDAR) {
+                CalendarScreen(
+                    tasks = tasks,
+                    onOpenTask = { task -> navController.navigate("add_edit?taskId=${task.id}") },
+                    onBack = { navController.popBackStack() }
                 )
             }
             composable(
