@@ -16,13 +16,15 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.studytracker.app.data.AppSettings
 import com.studytracker.app.data.ThemeMode
 import com.studytracker.app.data.ThemePreset
@@ -133,10 +135,60 @@ fun ThemeSettingsScreen(
                     }
                 }
                 if (settings.customBackgroundUri != null) {
+                    // Local state so dragging the slider feels instant — we only write the
+                    // final value back to persisted settings once the user lets go, instead
+                    // of round-tripping through DataStore on every pixel of drag.
+                    var previewOpacity by remember(settings.customBackgroundUri) {
+                        mutableStateOf(settings.backgroundOpacity)
+                    }
+
+                    Text("Live preview", style = MaterialTheme.typography.bodyMedium)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                    ) {
+                        AsyncImage(
+                            model = settings.customBackgroundUri,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                        // Same dimming math AppBackground uses on the real home screen,
+                        // so what you see here is exactly what you'll get.
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.background.copy(alpha = 1f - previewOpacity))
+                        )
+                        Card(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(12.dp)
+                                .fillMaxWidth(0.75f),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
+                            ),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(10.dp)) {
+                                Text("Physics Lab Report", style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    "Assignment \u00b7 Due tomorrow, 11:59 PM",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(8.dp))
                     Text("Background dimness", style = MaterialTheme.typography.bodyMedium)
                     Slider(
-                        value = settings.backgroundOpacity,
-                        onValueChange = onOpacityChange,
+                        value = previewOpacity,
+                        onValueChange = { previewOpacity = it },
+                        onValueChangeFinished = { onOpacityChange(previewOpacity) },
                         valueRange = 0.1f..0.6f
                     )
                 }
